@@ -1,0 +1,91 @@
+.chat-list {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chat-list h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.chat-list-search {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.chat-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.chat-list-item {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.chat-list-item:hover {
+    background: #eef3f8;
+}
+
+.new-message {
+    background: #e1f5fe;
+}
+
+.chat-list-user {
+    display: flex;
+    justify-content: space-between;
+}
+
+.chat-list-user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-list-user-name {
+    font-weight: bold;
+}
+
+.chat-list-user-email {
+    color: #555;
+}
+
+.chat-list-message-info {
+    text-align: right;
+}
+
+.chat-list-last-message {
+    font-style: italic;
+    color: #888;
+}
+
+.chat-list-last-message-time {
+    font-size: 0.85em;
+    color: #aaa;
+}
+
+@media (max-width: 600px) {
+    .chat-list {
+        padding: 10px;
+    }
+
+    .chat-list-user {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .chat-list-message-info {
+        text-align: left;
+        margin-top: 5px;
+    }
+}

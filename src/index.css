@@ -1,0 +1,88 @@
+LabComponent.css
+
+.container {
+    width: 90%;
+    margin: auto;
+    max-width: 1200px;
+  }
+  
+  .buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .buttons button,
+  .buttons input[type="file"] {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .images {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+  .image-container {
+    flex: 1;
+    margin: 10px;
+    text-align: center;
+  }
+  
+  .image-container h2 {
+    margin-bottom: 10px;
+  }
+  
+  .image-container img,
+  .image-container .placeholder {
+    width: 100%;
+    height: auto;
+    background: #e0e0e0;
+    display: inline-block;
+  }
+  
+  .placeholder {
+    height: 256px; /* Adjust based on the expected image height */
+  }
+  
+  .loading {
+    text-align: center;
+    font-size: 24px;
+    color: #007bff;
+  }
+  
+  .info {
+    margin-top: 0;
+  }
+  
+  .info h2 {
+    margin-bottom: 10px;
+  }
+  
+  .info pre {
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 4px;
+  }
+  
+  .info p {
+    font-size: 18px;
+  }
+  
+  @media (max-width: 768px) {
+    .images {
+      flex-direction: column;
+    }
+  
+    .image-container {
+      margin: 10px 0;
+    }
+  
+    .buttons {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+  

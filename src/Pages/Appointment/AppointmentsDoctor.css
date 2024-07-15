@@ -1,0 +1,127 @@
+:root {
+    --linkedin-blue: #0073b1;
+    --linkedin-light-blue: #00a0dc;
+    --success-green: #28a745;
+    --danger-red: #dc3545;
+    --warning-yellow: #ffc107;
+    --light-grey: #f4f4f4;
+    --dark-grey: #343a40;
+}
+
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.appointments-container {
+    margin: 20px auto;
+    max-width: 1200px;
+    padding: 10px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.appointments-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    table-layout: fixed;
+}
+
+.appointments-table th, .appointments-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    word-wrap: break-word;
+}
+
+.appointments-table th {
+    background-color: var(--light-grey);
+    color: var(--dark-grey);
+}
+
+.appointments-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.appointments-table tr:hover {
+    background-color: #f1f1f1;
+    transition: background-color 0.3s ease;
+}
+
+.approve-button, .delete-icon, .completion-icon {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.approve-button {
+    background-color: var(--linkedin-blue);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.approve-button.not-approved:hover {
+    background-color: var(--linkedin-light-blue);
+}
+
+.approve-button.approved {
+    background-color: var(--linkedin-light-blue);
+    cursor: not-allowed;
+}
+
+.completion-icon.completed {
+    color: var(--success-green);
+}
+
+.completion-icon.not-completed {
+    color: var(--danger-red);
+}
+
+.completion-icon:hover {
+    transform: scale(1.2);
+}
+
+.delete-icon {
+    color: var(--danger-red);
+}
+
+.delete-icon:hover {
+    color: var(--warning-yellow);
+}
+
+.hide-completed-btn {
+    background-color: var(--dark-grey);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.hide-completed-btn:hover {
+    background-color: var(--linkedin-blue);
+    transition: background-color 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .appointments-container {
+        padding: 5px;
+    }
+
+    .appointments-table th, .appointments-table td {
+        padding: 8px 10px;
+    }
+
+    .approve-button, .hide-completed-btn {
+        padding: 6px 8px;
+        font-size: 12px;
+    }
+}

@@ -1,0 +1,109 @@
+/* Verification.css */
+
+/* إعدادات الجذر */
+:root {
+    --primary-color: #0a66c2;
+    --secondary-color: #ffffff;
+    --background-color: #f3f2ef;
+    --text-color: #333333;
+    --border-radius: 8px;
+    --animation-duration: 0.3s;
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* تطبيق الخلفية الأساسية */
+body {
+    background-color: var(--background-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: var(--text-color);
+}
+
+/* تنسيق الحاوية */
+.verification-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: var(--secondary-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    animation: fadeIn var(--animation-duration) ease-in;
+}
+
+/* تنسيق العناوين */
+.verification-container h1 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* تنسيق الحقول */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input, .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: var(--border-radius);
+    transition: border-color var(--animation-duration);
+}
+
+.form-group input:focus, .form-group textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+/* تنسيق الأزرار */
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color var(--animation-duration);
+    text-align: center;
+    text-decoration: none;
+}
+
+.button:hover {
+    background-color: darken(var(--primary-color), 10%);
+}
+
+/* تأثير الفلاش عند الدخول */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* تخطيط مرن للموبايل */
+@media (max-width: 600px) {
+    .verification-container {
+        margin: 20px;
+        padding: 15px;
+    }
+
+    .form-group input, .form-group textarea {
+        padding: 8px;
+    }
+
+    .button {
+        padding: 8px 15px;
+    }
+}
