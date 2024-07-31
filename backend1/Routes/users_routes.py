@@ -14,39 +14,74 @@ def users_and_doctors(app):
     def verify_doctor():
         data = request.form.to_dict()
         files = request.files
-        user_id = data.get('user_id')  # تأكد من تمرير user_id مع الطلب
-        verification = DoctorVerification(
-            user_id=user_id,
-            full_name=data.get('fullName'),
-            birth_date=data.get('birthDate'),
-            address=data.get('address'),
-            phone_number=data.get('phoneNumber'),
-            email=data.get('email'),
-            clinic_address=data.get('clinicAddress'),
-            degree=data.get('degree'),
-            degree_certificate=files['degreeCertificate'].read(),
-            license_number=data.get('licenseNumber'),
-            license_certificate=files['licenseCertificate'].read(),
-            issuing_authority=data.get('issuingAuthority'),
-            experience_years=data.get('experienceYears'),
-            previous_workplaces=data.get('previousWorkplaces'),
-            professional_membership=data.get('professionalMembership'),
-            membership_number=data.get('membershipNumber'),
-            profile_picture=files['profilePicture'].read(),
-            identity_document=files['identityDocument'].read()
-        )
-        db.session.add(verification)
-        db.session.commit()
+        user_id = data.get('user_id')
 
-        # إضافة الطبيب إلى جدول الأطباء الموثقين
-        verified_doctor = VerifiedDoctor(
-            user_id=user_id,
-            verification_id=verification.id
-        )
-        db.session.add(verified_doctor)
-        db.session.commit()
+        # التحقق من وجود المستخدم في جداول DoctorVerification و VerifiedDoctor
+        existing_verification = DoctorVerification.query.filter_by(user_id=user_id).first()
+        existing_verified_doctor = VerifiedDoctor.query.filter_by(user_id=user_id).first()
 
-        return jsonify({'message': 'Verification data received successfully'}), 200
+        if existing_verification:
+            # تحديث المعلومات القديمة
+            existing_verification.full_name = data.get('fullName')
+            existing_verification.birth_date = data.get('birthDate')
+            existing_verification.address = data.get('address')
+            existing_verification.phone_number = data.get('phoneNumber')
+            existing_verification.email = data.get('email')
+            existing_verification.clinic_address = data.get('clinicAddress')
+            existing_verification.degree = data.get('degree')
+
+            if 'degreeCertificate' in files:
+                existing_verification.degree_certificate = files['degreeCertificate'].read()
+            if 'licenseCertificate' in files:
+                existing_verification.license_certificate = files['licenseCertificate'].read()
+            
+            existing_verification.license_number = data.get('licenseNumber')
+            existing_verification.issuing_authority = data.get('issuingAuthority')
+            existing_verification.experience_years = data.get('experienceYears')
+            existing_verification.previous_workplaces = data.get('previousWorkplaces')
+            existing_verification.professional_membership = data.get('professionalMembership')
+            existing_verification.membership_number = data.get('membershipNumber')
+
+            if 'profilePicture' in files:
+                existing_verification.profile_picture = files['profilePicture'].read()
+            if 'identityDocument' in files:
+                existing_verification.identity_document = files['identityDocument'].read()
+
+            db.session.commit()
+        else:
+            # إضافة معلومات جديدة
+            new_verification = DoctorVerification(
+                user_id=user_id,
+                full_name=data.get('fullName'),
+                birth_date=data.get('birthDate'),
+                address=data.get('address'),
+                phone_number=data.get('phoneNumber'),
+                email=data.get('email'),
+                clinic_address=data.get('clinicAddress'),
+                degree=data.get('degree'),
+                degree_certificate=files['degreeCertificate'].read(),
+                license_number=data.get('licenseNumber'),
+                license_certificate=files['licenseCertificate'].read(),
+                issuing_authority=data.get('issuingAuthority'),
+                experience_years=data.get('experienceYears'),
+                previous_workplaces=data.get('previousWorkplaces'),
+                professional_membership=data.get('professionalMembership'),
+                membership_number=data.get('membershipNumber'),
+                profile_picture=files['profilePicture'].read(),
+                identity_document=files['identityDocument'].read()
+            )
+            db.session.add(new_verification)
+            db.session.commit()
+
+            # إضافة الطبيب إلى جدول الأطباء الموثقين
+            new_verified_doctor = VerifiedDoctor(
+                user_id=user_id,
+                verification_id=new_verification.id
+            )
+            db.session.add(new_verified_doctor)
+            db.session.commit()
+
+        return jsonify({'message': 'Verification data processed successfully'}), 200
 
 
     
@@ -119,7 +154,7 @@ def users_and_doctors(app):
             "is_doctor": user.is_doctor,
             "specialty": user.specialty.name if user.specialty else None,
             "bio": user.bio,
-            "profile_pic": user.profile_pic.url if user.profile_pic else None,
+            # "profile_pic": user.profile_pic.url if user.profile_pic else None,
             "is_admin": user.is_admin
         } for user in users])
 
@@ -209,6 +244,7 @@ def users_and_doctors(app):
     @jwt_required()
     def get_doctors():
         specialty = request.args.get('specialty')
+        print(specialty)
         if specialty:
             specialty_obj = Specialty.query.filter_by(name=specialty).first()
             if specialty_obj:
@@ -268,7 +304,8 @@ def users_and_doctors(app):
             "email": user.email,
             "specialty": user.specialty.name if user.specialty else None,
             "bio": user.bio,
-            "profile_pic": profile_pic_data
+            "profile_pic": profile_pic_data,
+            "verified":user.is_verified
         })
 
     @app.route('/doctor/<int:doctor_id>', methods=['GET'])

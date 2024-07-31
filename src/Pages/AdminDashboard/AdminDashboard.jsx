@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import './AdminDashboard.css';
-import Sidebar from './Sidebar';
-import AllUsers from './AllUsers';
-import EditUser from './EditUser';
-import AddUser from './AddUser';
-import DoctorList from './DoctorList';
-import DoctorDetails from './DoctorDetails';
+import Sidebar from '../../Components/AdmindashboardComponents/Sidebar';
+import AllUsers from '../../Components/AdmindashboardComponents/AllUsers';
+import EditUser from '../../Components/AdmindashboardComponents/EditUser';
+import AddUser from '../../Components/AdmindashboardComponents/AddUser';
+import DoctorList from '../../Components/AdmindashboardComponents/DoctorList';
 
 const AdminDashboard = () => {
     const [users, setUsers] = useState([]);
@@ -61,7 +60,7 @@ const AdminDashboard = () => {
             <div className="main-content">
                 <Routes>
                     <Route path="/" element={
-            editingUser ? <EditUser user={editingUser} onClose={handleEditUserClose} /> : <AllUsers 
+                        editingUser ? <EditUser user={editingUser} onClose={handleEditUserClose} /> : <AllUsers 
                             users={users} 
                             startEditingUser={startEditingUser} 
                             deleteUser={deleteUser} 
@@ -69,7 +68,6 @@ const AdminDashboard = () => {
                     } />
                     <Route path="add-user" element={<AddUser onClose={() => fetchUsers()} />} />
                     <Route path="admin-doctors" element={<DoctorList />} />
-
                 </Routes>
             </div>
         </div>

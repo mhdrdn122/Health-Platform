@@ -16,6 +16,7 @@ const ChatList = () => {
     }, [userId]);
 
     const fetchChatList = () => {
+        console.log(userId)
         axios.get(`http://localhost:5000/api/chatlist/${userId}`)
             .then(response => {
                 setUsers(response.data);

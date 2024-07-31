@@ -11,7 +11,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   }
 
   const role = localStorage.getItem("role");
-
+  console.log(role, allowedRoles)
   if (!allowedRoles.includes(role)) {
     return <Navigate to="/login" state={{ path: location.pathname }} />;
   }

@@ -17,20 +17,50 @@ export const AuthProvider = ({ children }) => {
     }
     return null;
   });
+  const [refreshToken, setRefreshToken] = useState(localStorage.getItem('refreshToken'));
+  const [verified , setverified ] = useState(false);
 
- 
-  const login = (token) => {
-    localStorage.setItem('token', token);
-    const decoded = jwtDecode(token);
-
+  const login = (accessToken, refreshToken) => {
+    localStorage.setItem('token', accessToken);
+    localStorage.setItem('refreshToken', refreshToken);
+    const decoded = jwtDecode(accessToken);
     setAuth(decoded);
+    setverified(decoded.is_verified);
   };
 
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
     setAuth(null);
+    setRefreshToken(null);
   };
- 
+
+  const refreshAccessToken = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/refresh', {}, {
+        headers: {
+          'Authorization': `Bearer ${refreshToken}`
+        }
+      });
+      const newAccessToken = response.data.access_token;
+      localStorage.setItem('token', newAccessToken);
+      const decoded = jwtDecode(newAccessToken);
+      setAuth(decoded);
+    } catch (error) {
+      console.error('Error refreshing access token:', error);
+      logout();
+    }
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (auth) {
+        refreshAccessToken();
+      }
+    }, 15 * 60 * 1000); // تجديد التوكن كل 15 دقيقة
+    return () => clearInterval(interval);
+  }, [auth]);
+
   const handleSendNotification = async (userId , message) => {
     try {
       await axios.post('http://localhost:5000/notifications', {
@@ -41,13 +71,13 @@ export const AuthProvider = ({ children }) => {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-      alert('Notification sent successfully');
     } catch (error) {
       console.error('Error sending notification:', error);
     }
   };
+
   return (
-    <AuthContext.Provider value={{ auth, login, logout ,handleSendNotification }}>
+    <AuthContext.Provider value={{ auth, login, logout ,handleSendNotification ,verified }}>
       {children}
     </AuthContext.Provider>
   );

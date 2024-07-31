@@ -78,7 +78,7 @@ const Register = () => {
                 name="first_name"
                 value={formData.first_name}
                 onChange={handleChange}
-                placeholder="First Name"
+                placeholder="الاسم الأول"
                 required
                 className='login__input'
               />
@@ -90,7 +90,7 @@ const Register = () => {
                 name="last_name"
                 value={formData.last_name}
                 onChange={handleChange}
-                placeholder="Last Name"
+                placeholder="الاسم الآخر"
                 required
                 className='login__input'
               />
@@ -102,7 +102,7 @@ const Register = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="Email"
+                placeholder="ادخل الايميل الخاص بك "
                 required
                 className='login__input'
               />
@@ -114,7 +114,7 @@ const Register = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                placeholder="Password"
+                placeholder="كلمة المرور"
                 required
                 className='login__input red'
               />
@@ -126,18 +126,17 @@ const Register = () => {
                 checked={formData.is_doctor}
                 onChange={handleChange}
               />
-              Are you a doctor?
+              هل أنت طبيب?
             </label>
             {formData.is_doctor && (
               <select name="specialty" value={formData.specialty} onChange={handleChange}>
                 <option value="">Select Specialty</option>
                 <option value="Brain Cancer">Brain Cancer</option>
                 <option value="Skin Cancer">Skin Cancer</option>
-                <option value="Blood Cancer">Blood Cancer</option>
               </select>
             )}
             <button type="submit" className="button login__submit">
-              <span className="button__text">Register</span>
+              <span className="button__text">تسجيل</span>
               <i className="button__icon fas fa-chevron-right"></i>
             </button>
           </form>

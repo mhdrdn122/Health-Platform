@@ -1,109 +1,90 @@
-/* Verification.css */
-
-/* إعدادات الجذر */
-:root {
-    --primary-color: #0a66c2;
-    --secondary-color: #ffffff;
-    --background-color: #f3f2ef;
-    --text-color: #333333;
-    --border-radius: 8px;
-    --animation-duration: 0.3s;
-    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-/* تطبيق الخلفية الأساسية */
-body {
-    background-color: var(--background-color);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* Reset some default browser styles */
+* {
     margin: 0;
     padding: 0;
-    color: var(--text-color);
-}
-
-/* تنسيق الحاوية */
-.verification-container {
-    max-width: 600px;
+    box-sizing: border-box;
+  }
+  
+  /* Container styling */
+  .verification-container {
+    max-width: 800px;
     margin: 50px auto;
     padding: 20px;
-    background-color: var(--secondary-color);
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    animation: fadeIn var(--animation-duration) ease-in;
-}
-
-/* تنسيق العناوين */
-.verification-container h1 {
-    color: var(--primary-color);
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  /* Heading styling */
+  .verification-container h1 {
     text-align: center;
     margin-bottom: 20px;
-}
-
-/* تنسيق الحقول */
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-group label {
+    color: #0073b1;
+  }
+  
+  /* Label styling */
+  .verification-container label {
     display: block;
-    margin-bottom: 5px;
+    margin: 15px 0 5px;
     font-weight: bold;
-}
-
-.form-group input, .form-group textarea {
+    color: #333;
+  }
+  
+  /* Input, textarea and select styling */
+  .verification-container input[type="text"],
+  .verification-container input[type="date"],
+  .verification-container input[type="tel"],
+  .verification-container input[type="email"],
+  .verification-container  input[type="number"],
+  .verification-container textarea,
+  .verification-container input[type="file"] {
     width: 100%;
     padding: 10px;
-    border: 1px solid #cccccc;
-    border-radius: var(--border-radius);
-    transition: border-color var(--animation-duration);
-}
-
-.form-group input:focus, .form-group textarea:focus {
-    border-color: var(--primary-color);
-    outline: none;
-}
-
-/* تنسيق الأزرار */
-.button {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: var(--primary-color);
-    color: var(--secondary-color);
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  /* Button styling */
+  .verification-container button[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background-color: #0073b1;
     border: none;
-    border-radius: var(--border-radius);
+    border-radius: 5px;
+    color: #fff;
+    font-size: 18px;
     cursor: pointer;
-    transition: background-color var(--animation-duration);
-    text-align: center;
-    text-decoration: none;
-}
-
-.button:hover {
-    background-color: darken(var(--primary-color), 10%);
-}
-
-/* تأثير الفلاش عند الدخول */
-@keyframes fadeIn {
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+  }
+  
+  .verification-container button[type="submit"]:hover {
+    background-color: #005f8d;
+  }
+  
+  /* Add some basic responsiveness */
+  @media (max-width: 600px) {
+    .verification-container {
+      padding: 15px;
+      margin: 20px auto;
+    }
+  }
+  
+  /* Fade-in animation */
+  @keyframes fadeIn {
     from {
-        opacity: 0;
-        transform: translateY(-10px);
+      opacity: 0;
+      transform: translateY(-20px);
     }
     to {
-        opacity: 1;
-        transform: translateY(0);
+      opacity: 1;
+      transform: translateY(0);
     }
-}
-
-/* تخطيط مرن للموبايل */
-@media (max-width: 600px) {
-    .verification-container {
-        margin: 20px;
-        padding: 15px;
-    }
-
-    .form-group input, .form-group textarea {
-        padding: 8px;
-    }
-
-    .button {
-        padding: 8px 15px;
-    }
-}
+  }
+  

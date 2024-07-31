@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './verification.css';
-import { useParams } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../auth';
 
 const Verification = () => {
   const { handleSendNotification } = useAuth();
+  const navigate = useNavigate()
 
     const doctorId = useParams()
   console.log(doctorId)
@@ -54,8 +57,13 @@ const Verification = () => {
       });
       handleSendNotification("1","قام طبيب جديد بالتسجيل معلوماته بإنتظار  التوثيق")
       console.log(response.data);
+    toast.success("تم ارسال البيانات بنجاح سنعلمك بحالة حسابك قريبأ")
+    navigate("/")
+
     } catch (error) {
       console.error('Error during verification:', error);
+    toast.error("حدث خطأ غير متوقع عاود المحاولة مرة أخرى من فضلك")
+
     }
   };
 
@@ -116,6 +124,8 @@ const Verification = () => {
 
         <button type="submit">إرسال</button>
       </form>
+      <ToastContainer />
+
     </div>
   );
 };

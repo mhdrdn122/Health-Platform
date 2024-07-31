@@ -1,0 +1,50 @@
+.doctor-list-container {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.doctors-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    overflow-x: auto;
+}
+
+.doctors-table th, .doctors-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.doctors-table th {
+    background-color: #0073b1;
+    color: #fff;
+}
+
+.view-details-link {
+    color: #0073b1;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.view-details-link:hover {
+    background-color: #005582;
+    color: #fff;
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    .doctors-table th, .doctors-table td {
+        font-size: 0.9em;
+        padding: 8px;
+    }
+
+    .view-details-link {
+        padding: 6px 12px;
+    }
+}

@@ -1,4 +1,3 @@
-
 import eventlet
 eventlet.monkey_patch()
 
@@ -40,7 +39,9 @@ CORS(app)
 app.config.from_object(Config)
 db.init_app(app)
 jwt.init_app(app)
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, async_mode='eventlet', cors_allowed_origins="*")
+# socketio = SocketIO(app, cors_allowed_origins="*")
+
 
 routes(app)
 

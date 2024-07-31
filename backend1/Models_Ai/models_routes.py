@@ -159,10 +159,10 @@ def ai(app):
 
     # ******************* Model skin cancer start **********************
 
-    # تحميل النموذج المدرب
-    model_path = 'Skin Cancer.h5'
-    model = tf.keras.models.load_model(model_path, compile=False)
-    model.compile(optimizer='Adamax', loss='categorical_crossentropy', metrics=['accuracy'])
+    # # تحميل النموذج المدرب
+    model_path_skin = 'Skin Cancer.h5'
+    model_skin = tf.keras.models.load_model(model_path_skin, compile=False)
+    model_skin.compile(optimizer='Adamax', loss='categorical_crossentropy', metrics=['accuracy'])
 
     # أسماء الفئات
     class_labels = ['حميد', 'خبيث']
@@ -173,7 +173,7 @@ def ai(app):
         img = img.resize((224, 224))
         img_array = tf.keras.preprocessing.image.img_to_array(img)
         img_array = np.expand_dims(img_array, axis=0)
-        predictions = model.predict(img_array)
+        predictions = model_skin.predict(img_array)
         score = tf.nn.softmax(predictions[0])
         predicted_class = class_labels[np.argmax(score)]
         return predicted_class

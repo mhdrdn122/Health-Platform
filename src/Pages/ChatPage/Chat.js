@@ -95,7 +95,7 @@ const Chat = () => {
     socket.emit('join', { email: user.email, room });
 
     socket.on('receive_message', (data) => {
-      console.log("test",data)
+      console.log("Received message:", data); // تحقق من البيانات المستقبلة
       if (
         (data.sender_id === user.id && data.receiver_id === recipient.id) ||
         (data.sender_id === recipient.id && data.receiver_id === user.id)
@@ -107,7 +107,11 @@ const Chat = () => {
       }
     });
 
-    fetchMessages(user.id, recipient.id);
+    setInterval(() => {
+      if(user.id){
+        fetchMessages(user.id, recipient.id);
+      }
+    }, 3000);
 
     return () => {
       socket.emit('leave', { email: user.email, room });
@@ -124,14 +128,15 @@ const Chat = () => {
       console.error('حدث خطأ أثناء جلب الرسائل:', error);
     }
   };
-// console.log(messages)
+
   const getRoomName = (user1, user2) => {
     user2 = parseInt(user2);
+    user1 = parseInt(user1);
     return `room_${Math.min(user1, user2)}_${Math.max(user1, user2)}`;
   };
 
   const sendMessage = () => {
-    console.log("data")
+    if (!message.trim() && !file) return;
 
     if (file) {
       const reader = new FileReader();
@@ -142,9 +147,11 @@ const Chat = () => {
           receiver_id: recipient.id,
           file_data: fileData,
           file_name: file.name,
-          file_type: file.type
+          file_type: file.type,
+          timestamp: new Date().toISOString()
         };
         socket.emit('send_message', data);
+        setMessages((prevMessages) => [...prevMessages, data]); // Update state immediately
         setFile(null);
       };
       reader.readAsDataURL(file);
@@ -152,10 +159,9 @@ const Chat = () => {
       const data = {
         sender_id: user.id,
         receiver_id: recipient.id,
-        content: message
+        content: message,
+        timestamp: new Date().toISOString()
       };
-      console.log(data)
-
       socket.emit('send_message', data);
       setMessages((prevMessages) => [...prevMessages, data]); // Update state immediately
       setMessage('');
@@ -167,7 +173,7 @@ const Chat = () => {
   };
 
   const handleLeaveChat = () => {
-    navigate('/doctors', { state: { user } });
+    navigate('/chat-list', { state: { user } });
   };
 
   const deleteMessage = async (messageId) => {
@@ -205,72 +211,90 @@ const Chat = () => {
     (msg) => msg.content && msg.content.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  };
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
+console.log(messages)
   return (
-    <div className="chat-container">
+    <div className={`chat-container ${darkMode ? 'dark-mode' : ''}`}>
       <h1>Chat with {recipient.id}</h1>
       <h3>{userStatus}</h3>
+      <button onClick={toggleDarkMode}>{darkMode ? 'Light Mode' : 'Dark Mode'}</button>
       <div className="messages">
-        {filteredMessages.map((msg, index) => (
-          <div key={index} className={`message ${msg.sender_id === user.id ? 'sent' : 'received'}`}>
-            {msg.content && (
-              <div>
-                {msg.id === editMessageId ? (
-                  <div>
-                    <input
-                      type="text"
-                      value={editMessageContent}
-                      onChange={(e) => setEditMessageContent(e.target.value)}
-                    />
-                    <button onClick={editMessage}>Save</button>
-                  </div>
-                ) : (
-                  <p>{msg.content} <span className="timestamp">{msg.timestamp}</span></p>
-                )}
-              </div>
-            )}
-            {msg.file_data && msg.file_type.startsWith('image/') && (
-              <div>
-                <img src={`data:${msg.file_type};base64,${msg.file_data}`} alt={msg.file_name} />
-                <button onClick={() => {
-                  const link = document.createElement('a');
-                  link.href = `data:${msg.file_type};base64,${msg.file_data}`;
-                  link.download = msg.file_name;
-                  document.body.appendChild(link);
-                  link.click();
-                  document.body.removeChild(link);
-                }}>Download</button>
-                <span className="timestamp">{msg.timestamp}</span>
-              </div>
-            )}
-            {msg.file_data && !msg.file_type.startsWith('image/') && (
-              <div>
-                <a href={`data:${msg.file_type};base64,${msg.file_data}`} download={msg.file_name}>
-                  {msg.file_name}
-                </a>
-                <span className="timestamp">{msg.timestamp}</span>
-              </div>
-            )}
-            {msg.sender_id === user.id && (
-              <div>
-                <button onClick={() => deleteMessage(msg.id)}>Delete</button>
-                <button onClick={() => { setEditMessageId(msg.id); setEditMessageContent(msg.content); }}>Edit</button>
-              </div>
-            )}
-            {msg.sender_id !== user.id && (
-              <button onClick={() => deleteMessage(msg.id)}>Delete for me</button>
-            )}
-          </div>
-        ))}
-      </div>
+  {filteredMessages.map((msg, index) => (
+    <div key={index} className={`message ${msg.sender_id === user.id ? 'sent' : 'received'}`}>
+      {msg.content && (
+        <div>
+          {msg.id === editMessageId ? (
+            <div>
+              <input
+                type="text"
+                value={editMessageContent}
+                onChange={(e) => setEditMessageContent(e.target.value)}
+              />
+              <button onClick={editMessage}>Save</button>
+            </div>
+          ) : (
+            <p>{msg.content} <span className="timestamp">{msg.timestamp}</span></p>
+          )}
+        </div>
+      )}
+      {msg.file_data && msg.file_type && msg.file_name && (
+        <div>
+          {msg.file_type.startsWith('image/') ? (
+            <div>
+              <img src={`data:${msg.file_type};base64,${msg.file_data}`} alt={msg.file_name} />
+              <button onClick={() => {
+                const link = document.createElement('a');
+                link.href = `data:${msg.file_type};base64,${msg.file_data}`;
+                link.download = msg.file_name;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+              }}>Download</button>
+              <span className="timestamp">{msg.timestamp}</span>
+            </div>
+          ) : (
+            <div>
+              <a href={`data:${msg.file_type};base64,${msg.file_data}`} download={msg.file_name}>
+                {msg.file_name}
+              </a>
+              <span className="timestamp">{msg.timestamp}</span>
+            </div>
+          )}
+        </div>
+      )}
+      {msg.sender_id === user.id && (
+        <div>
+          <button onClick={() => deleteMessage(msg.id)}>Delete</button>
+          <button onClick={() => { setEditMessageId(msg.id); setEditMessageContent(msg.content); }}>Edit</button>
+        </div>
+      )}
+      {msg.sender_id !== user.id && (
+        <button onClick={() => deleteMessage(msg.id)}>Delete for me</button>
+      )}
+    </div>
+  ))}
+</div>
+
+
+
       <div className="input-container">
         <input
           type="text"
           placeholder="Type a message..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          onKeyPress={handleKeyPress}
         />
         <input type="file" onChange={handleFileChange} />
-        <button onClick={sendMessage}>Send</button>
+        <button onClick={sendMessage} disabled={!message.trim() && !file}>Send</button>
         <button onClick={handleLeaveChat}>Leave Chat</button>
       </div>
     </div>

@@ -78,6 +78,7 @@ def chat_socket(app):
         data = request.get_json()
         sender_id = data['sender_id']
         receiver_id = data['receiver_id']
+        print(sender_id, receiver_id)
         messages = Message.query.filter(
             ((Message.sender_id == sender_id) & (Message.receiver_id == receiver_id) & (Message.sender_deleted == False)) |
             ((Message.sender_id == receiver_id) & (Message.receiver_id == sender_id) & (Message.receiver_deleted == False))
@@ -93,7 +94,8 @@ def chat_socket(app):
             "file_type": msg.file_type,
             "timestamp": msg.timestamp.strftime('%Y-%m-%d %H:%M:%S')
         } for msg in messages])
-    
+       
+
     @app.route('/read_message', methods=['POST'])
     def read_message():
         data = request.get_json()
@@ -212,7 +214,7 @@ def chat_socket(app):
             )
         db.session.add(new_message)
         db.session.commit()
-
+        print(data['sender_id'] , data['receiver_id'])
         room = get_room_name(data['sender_id'], data['receiver_id'])
         emit('receive_message', {
             'id': new_message.id,
@@ -255,5 +257,6 @@ def chat_socket(app):
         emit('user_left', {'email': email, 'room': room}, room=room)
 
     def get_room_name(user1, user2):
-        return f'room_{min(user1, user2)}_{max(user1, user2)}'
+        return f'room_{min(int(user1), int(user2))}_{max(int(user1), int(user2))}'
+
 

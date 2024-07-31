@@ -4,13 +4,14 @@ import { useAuth } from '../../auth';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './Login.css';
+import jwtDecode from 'jwt-decode';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const { login } = useAuth();
-  const location = useLocation()
+  const location = useLocation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,23 +39,28 @@ const Login = () => {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem("role", data.role);
-        login(data.access_token);
-        const redirect = location.state?.path || '/'
+        localStorage.setItem("verified", data.is_verifie);
+
+        console.log(data);
+        login(data.access_token, data.refresh_token);
+        const redirect = location.state?.path || '/';
         switch (data.role) {
           case "patient":
-            navigate(redirect,{ replace:true});
+            navigate(redirect, { replace: true });
             break;
           case "doctor":
-            // navigate(`/profile/${data.user_id}`,{ replace:true});
-            navigate(`/verification/${data.user_id}`,{ replace:true});
-
-
+            console.log(data.is_verifie)
+            if (data.is_verified) {
+              navigate(`/profile/${data.user_id}`, { replace: true });
+            } else {
+              navigate(`/verification/${data.user_id}`, { replace: true });
+            }
             break;
           case "admin":
-            navigate('/admin/',{ replace:true});
+            navigate('/admin/', { replace: true });
             break;
           default:
-            navigate('/',{ replace:true});
+            navigate('/', { replace: true });
         }
       } else if (response.status === 401) {
         toast.error('بيانات الاعتماد غير صالحة.');
@@ -78,11 +84,11 @@ const Login = () => {
           <form onSubmit={handleSubmit} className="login">
             <div className="login__field">
               <i className="login__icon fas fa-user"></i>
-              <input type="email" className='login__input' placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              <input type="email" className='login__input' placeholder="ادخل الايميل الخاص بك" value={email} onChange={(e) => setEmail(e.target.value)} required />
             </div>
             <div className="login__field">
               <i className="login__icon fas fa-lock"></i>
-              <input type="password" className='login__input' placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              <input type="password" className='login__input' placeholder="كلمة المرور" value={password} onChange={(e) => setPassword(e.target.value)} required />
             </div>
             <button type="submit" className="button login__submit">
               <span className="button__text">تسجيل الدخول الآن</span>

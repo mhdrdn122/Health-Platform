@@ -9,6 +9,7 @@ function Doctors() {
   const [doctors, setDoctors] = useState([]);
   const { auth } = useAuth();
   const navigate = useNavigate();
+  const [id , setId] = useState()
 
   useEffect(() => {
     axios.get('http://localhost:5000/doctors', {
@@ -22,9 +23,10 @@ function Doctors() {
     .catch(error => {
       console.error('There was an error fetching the doctors!', error);
     });
+    setId(auth.sub.id)
   }, []);
 
-  const mapingDoctor = doctors.slice(0, 3).map((doctor) => {
+  const mapingDoctor = doctors.filter(doctor => doctor.id !=id).slice(0, 3).map((doctor) => {
     const imgSrc = doctor.profile_pic 
       ? `data:image/jpeg;base64,${btoa(doctor.profile_pic)}`
       : 'icon'; // يمكن استبدال هذا بمسار صورة افتراضية

@@ -28,7 +28,7 @@ function Navbar() {
     setNav(!nav);
   };
 
-
+console.log(user)
 
   const fetchNotifications = async () => {
     try {
